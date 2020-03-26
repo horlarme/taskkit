@@ -1,6 +1,6 @@
 import Vue from "nativescript-vue";
-
-import Home from "./components/Home";
+import Home from './components/pages/Home'
+import './component_list'
 
 new Vue({
 
@@ -8,7 +8,6 @@ new Vue({
         <Frame>
             <Home />
         </Frame>`,
-
     components: {
         Home
     }
