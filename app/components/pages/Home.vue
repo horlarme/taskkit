@@ -1,92 +1,69 @@
 <template>
     <page actionBarHidden='true' backgroundColor='#FFF'>
-        <GridLayout rows='auto, *'>
-            <custom-action-bar  row='0'/>
-            <TabView row='2' tabTextColor='black'>
-                <TabViewItem title="Category" textTransform="capitalize">
-                        <list-view for='category in categories' seperatorColor='transparent'>
-                            <v-template>
-                                <task :category='category' />
-                            </v-template>
-                        </list-view>
-                </TabViewItem>
-                <TabViewItem title="Category" textTransform="capitalize">
-                    <scroll-view>
-                        <wrap-layout width='100%'>
-                            <category v-for="(category, index) in categories" 
-                                :key='index' :category='category' />
-                        </wrap-layout>
-                    </scroll-view>
-                </TabViewItem>
-                <TabViewItem title="Tasks" textTransform="capitalize">
-                    <grid-layout backgroundColor='yellow'>
-                        <list-view for='category in categories'>
-                            <v-template>
-                                <task :category='category' />
-                            </v-template>
-                        </list-view>
-                    </grid-layout>
-                </TabViewItem>
-            </TabView>
-
+        <GridLayout rows='*'>
+            <GridLayout row='0' rows='auto, *'>
+                <custom-action-bar row='0' title='Tasks List'/>
+                <TabView row='2' tabTextColor='black'>
+                    <TabViewItem title="Category" textTransform="capitalize">
+                        <scroll-view>
+                            <wrap-layout width='100%'>
+                                <category v-for="(category, index) in getTasksByCategories"
+                                          :key='index' :category='category'
+                                          v-if="category.tasks.length"/>
+                            </wrap-layout>
+                        </scroll-view>
+                    </TabViewItem>
+                    <TabViewItem title="Tasks" textTransform="capitalize">
+                        <grid-layout backgroundColor='white'>
+                            <list-view for='task in tasks'>
+                                <v-template>
+                                    <task :task='task'/>
+                                </v-template>
+                            </list-view>
+                        </grid-layout>
+                    </TabViewItem>
+                </TabView>
+            </GridLayout>
+            <fab row='0' class="fab-button" @tap="gotoCreatePage" icon="res://plus_white"/>
         </GridLayout>
     </page>
 </template>
 
 <script>
+    import {CreateTask} from '../index'
+
     export default {
-        data() {
+        mounted () {
+            this.fetchTasksAndCategories()
+        },
+        methods: {
+            fetchTasksAndCategories () {
+                this.tasks = this.$database().query()
+                this.categories = this.$database('categories').query()
+            },
+            gotoCreatePage () {
+                this.$navigateTo(CreateTask)
+                    .then(this.fetchTasksAndCategories)
+            }
+        },
+        data () {
             return {
-                categories: [
-                    {
-                        name: 'The first category',
-                        color: 'red',
-                    },
-                    {
-                        name: 'The first category',
-                        color: '#D45444',
-                    },
-                    {
-                        name: 'The first category',
-                        color: '#5990EE',
-                    },
-                    {
-                        name: 'The first category',
-                        color: '#5990EE',
-                    },
-                    {
-                        name: 'The first category',
-                        color: '#60E5C7',
-                    },
-                    {
-                        name: 'The first category',
-                        color: '#5990EE',
-                    },
-                    {
-                        name: 'The first category',
-                        color: '#5990EE',
-                    },
-                    {
-                        name: 'The first category',
-                        color: '#D45444',
-                    },
-                    {
-                        name: 'The first category',
-                        color: '#5990EE',
-                    },
-                    {
-                        name: 'The first category',
-                        color: '#BEEA91',
-                    },
-                    {
-                        name: 'The first category',
-                        color: '#BEEA91',
-                    },
-                    {
-                        name: 'The first category',
-                        color: '#5990EE',
-                    }
-                ]
+                categories: [],
+                tasks: []
+            }
+        },
+        computed: {
+            getTasksByCategories () {
+                const categories = this.categories
+
+                categories.map(category => {
+                    category.tasks = this.$database().query({
+                        where: [ { property: 'categories', comparison: 'equalTo', value: category.id } ],
+                        limit: 5
+                    })
+                })
+
+                return categories
             }
         }
     }

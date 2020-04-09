@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { Task, CustomActionBar, Category } from './components'
+import {Category, CustomActionBar, Task} from './components'
 
 Vue.component('custom-action-bar', CustomActionBar)
 Vue.component('category', Category)

@@ -13,6 +13,8 @@
   "repository": "<fill-your-repository-here>",
   "dependencies": {
     "@nativescript/theme": "~2.3.0",
+    "nativescript-couchbase-plugin": "^0.9.6",
+    "nativescript-floatingactionbutton": "^5.1.0",
     "nativescript-vue": "~2.4.0",
     "tns-core-modules": "~6.4.0"
   },
