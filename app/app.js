@@ -1,16 +1,14 @@
 import Vue from 'nativescript-vue'
-import Home from './components/pages/Home'
 import './component_list'
 import {Couchbase} from 'nativescript-couchbase-plugin'
 
 Vue.registerElement('Fab', () => require('nativescript-floatingactionbutton').Fab)
 
-Vue.prototype.$database = (document = 'tasks') => new Couchbase(document)
-Vue.config.silent = TNS_ENV === 'production'
+Vue.prototype.$tasks = new Couchbase('tasks')
+Vue.prototype.$categories = new Couchbase('categories')
+
+Vue.config.silent = false
 
 new Vue({
-    template: `<frame><Home /></frame>`,
-    components: {
-        Home
-    }
+    template: `<frame><home /></frame>`
 }).$start()

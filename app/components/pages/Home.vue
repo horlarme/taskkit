@@ -2,18 +2,20 @@
     <page actionBarHidden='true' backgroundColor='#FFF'>
         <GridLayout rows='*'>
             <GridLayout row='0' rows='auto, *'>
-                <custom-action-bar row='0' title='Tasks List'/>
-                <TabView row='2' tabTextColor='black'>
-                    <TabViewItem title="Category" textTransform="capitalize">
+                <custom-action-bar row='0' :title='title'/>
+                <TabView row='2' tabTextColor='#f5f5f5'
+                         tabBackgroundColor="blue"
+                         selectedTabTextColor="white">
+                    <tab-view-item title="Task Categories">
                         <scroll-view>
                             <wrap-layout width='100%'>
-                                <category v-for="(category, index) in getTasksByCategories"
-                                          :key='index' :category='category'
-                                          v-if="category.tasks.length"/>
+                                <stack-layout v-for="(category, index) in getTasksByCategories" :key='index'>
+                                    <category :category='category'/>
+                                </stack-layout>
                             </wrap-layout>
                         </scroll-view>
-                    </TabViewItem>
-                    <TabViewItem title="Tasks" textTransform="capitalize">
+                    </tab-view-item>
+                    <TabViewItem title="Task List">
                         <grid-layout backgroundColor='white'>
                             <list-view for='task in tasks'>
                                 <v-template>
@@ -33,23 +35,29 @@
     import {CreateTask} from '../index'
 
     export default {
-        mounted () {
-            this.fetchTasksAndCategories()
+        async mounted () {
+            await this.fetchTasksAndCategories()
+            this.$root.$on([ 'database::change::tasks', 'database::change::categories' ], async (changes) => {
+                await this.fetchTasksAndCategories()
+            })
         },
         methods: {
-            fetchTasksAndCategories () {
-                this.tasks = this.$database().query()
-                this.categories = this.$database('categories').query()
+            async fetchTasksAndCategories () {
+                new Promise((resolve) => {
+                    console.log('fetch task and categories called')
+                    this.tasks = this.$tasks.query()
+                    this.categories = this.$categories.query()
+                })
             },
             gotoCreatePage () {
                 this.$navigateTo(CreateTask)
-                    .then(this.fetchTasksAndCategories)
             }
         },
         data () {
             return {
                 categories: [],
-                tasks: []
+                tasks: [],
+                title: 'Tasks List'
             }
         },
         computed: {
@@ -57,7 +65,7 @@
                 const categories = this.categories
 
                 categories.map(category => {
-                    category.tasks = this.$database().query({
+                    category.tasks = this.$tasks.query({
                         where: [ { property: 'categories', comparison: 'equalTo', value: category.id } ],
                         limit: 5
                     })
@@ -68,6 +76,3 @@
         }
     }
 </script>
-
-<style scoped lang="scss">
-</style>

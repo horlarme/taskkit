@@ -56,8 +56,8 @@
                     color: this.colors[this.color]
                 }
 
-                this.$database('categories')
-                    .createDocument(data)
+                this.$categories.createDocument(data)
+                this.$root.$emit('database::change::categories')
                 this.$navigateBack()
             },
             selectColor (index) {

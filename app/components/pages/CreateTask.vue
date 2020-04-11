@@ -1,33 +1,31 @@
 <template>
     <page :actionBarHidden="true">
         <grid-layout>
-            <grid-layout rows="auto, *">
-                <custom-action-bar title="Create New Task" row="0" :back="true"
-                                   :actionItems="getIcons"/>
-                <scroll-view row="1">
-                    <stack-layout>
-                        <text-field padding="15 10" backgroundColor="#d3d3d3" borderTopLeftRadius="5"
-                                    v-model="title"
-                                    borderTopRightRadius="5" borderBottomColor="#00008b" margin="5 5 5 5" fontSize="14"
-                                    hint="Task Title" keyboardType="text" returnKeyType="next"/>
-
-                        <label text="Category" paddingTop="10" paddingLeft="5" fontSize="14"/>
+            <grid-layout rows="auto, *" backgroundColor="white">
+                <custom-action-bar title="Create New Task" row="0" :back="true"/>
+                <grid-layout rows="*, auto" row="1" height="100%">
+                    <stack-layout row="0" padding="10">
+                        <custom-text-field v-model="title" hint="Task Title"/>
+                        <label text="Category" padding="20 5 15"
+                               fontSize="18" fontWeight="bold"/>
                         <wrap-layout>
                             <label :text="`${selectedCategory === index ?'\uf00c' : ''}${category.name}` "
                                    v-for="(category, index) in categories" :key="index"
                                    :backgroundColor="category.color" padding="15 25" fontSize="16"
                                    @tap="selectedCategory = index"
                                    color="white" margin="5" borderRadius="5" class="fas"/>
-                            <label :text="'\uf067'" padding="15 25" fontSize="18" color="blue" margin="5"
+                            <label :text="'\uf067'" padding="15 18" fontSize="18" margin="5"
                                    @tap="createNewCategory"
-                                   borderColor="blue" borderWidth="1" borderRadius="5" class="fas"/>
+                                   class="fas c-bg-blue c-white"
+                                   borderRadius="100"/>
                         </wrap-layout>
-                        <label text="Date" paddingTop="10" paddingLeft="5" fontSize="14"/>
-                        <date-picker :minDate="Date.now()"/>
-                        <label text="Time" paddingTop="10" paddingLeft="5" fontSize="14"/>
-                        <time-picker :minDate="Date.now()"/>
+
                     </stack-layout>
-                </scroll-view>
+                    <label row="1" :text="'\uf0c7 Add Task'" androidElevation="3"
+                           @tap="saveNewTask"
+                           class="fas c-bg-blue c-white p-16 text-center font-weight-bold text-uppercase"
+                           fontSize="16"/>
+                </grid-layout>
             </grid-layout>
         </grid-layout>
     </page>
@@ -46,45 +44,27 @@
         },
         mounted () {
             this.fetchCategories()
-        },
-        computed: {
-            getIcons () {
-                return [
-                    {
-                        value: '\uf0c7',
-                        callback: () => {
-                            this.saveNewTask()
-                        }
-                    }
-                ]
-            }
+
+            this.$root.$on('database::change::categories', async (changes) => {
+                this.fetchCategories()
+            })
         },
         methods: {
             saveNewTask () {
-                if (!this.selectedCategory) alert('Select a category')
-                if (!this.title || this.title === '') alert('Enter a valid task title')
-
-                console.log({
+                if (this.selectedCategory === null) return alert('Select a category')
+                if (!this.title || this.title === '') return alert('Enter a valid task title')
+                this.$tasks.createDocument({
                     categories: this.categories[this.selectedCategory].id,
                     title: this.title
                 })
-                const id = this.$database().createDocument({
-                    categories: this.categories[this.selectedCategory].id,
-                    title: this.title
-                })
-                console.log(`newest task ${id}`)
+                this.$root.$emit('database::change::tasks')
                 this.$navigateBack()
             },
             createNewCategory () {
                 this.$navigateTo(CreateCategory)
-                    .then(() => {
-                        this.fetchCategories()
-                    })
             },
             fetchCategories () {
-                this.categories = this.$database().query({
-                    from: 'categories'
-                })
+                this.categories = this.$categories.query()
             }
         }
     }

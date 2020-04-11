@@ -1,10 +1,10 @@
 <template>
-    <stack-layout width='100%' borderLeftWidth='5'
-                  :borderColor='category.color' backgroundColor='white'
-                  padding='10 15 10 15' horizontalAlignment='stretch'
-                  verticalAlignment='center'
-                  orientation="horizontal">
-        <stack-layout margin='0' padding='0'>
+    <flexbox-layout width='100%' borderLeftWidth='5' alignItems="center"
+                    :borderColor='category.color' backgroundColor='white'
+                    padding='10 15 10 15' horizontalAlignment='stretch'
+                    verticalAlignment='center'
+                    orientation="horizontal">
+        <stack-layout margin='0' padding='0' flexGrow="1">
             <label :text='category.name' fontSize='14'
                    fontWeight='semibold' textTransform='uppercase'
                    color='blue' marginBottom='3'/>
@@ -15,7 +15,7 @@
             <label text.decode='&#xf303;' fontSize='16' color='#B8B7BF'
                    class='fas'/>
         </stack-layout>
-    </stack-layout>
+    </flexbox-layout>
 </template>
 
 <script>
@@ -27,7 +27,7 @@
             }
         },
         mounted () {
-            this.category = this.$database('categories').getDocument(this.task.categories)
+            this.category = this.$categories.getDocument(this.task.categories)
         },
         data: function () {
             return {
