@@ -8,11 +8,16 @@
                          selectedTabTextColor="white">
                     <tab-view-item title="Task Categories">
                         <scroll-view>
-                            <wrap-layout width='100%'>
+                            <wrap-layout width='100%' v-if="categories.length">
                                 <stack-layout v-for="(category, index) in getTasksByCategories" :key='index'>
                                     <category :category='category'/>
                                 </stack-layout>
                             </wrap-layout>
+                            <stack-layout verticalAlignment="center" height="100%" width="100%"
+                                          horizontalAlignment="center">
+                                <label text="Create a new category using the floating button." fontSize="16"
+                                       class="text-center"/>
+                            </stack-layout>
                         </scroll-view>
                     </tab-view-item>
                     <TabViewItem title="Task List">
@@ -32,7 +37,7 @@
 </template>
 
 <script>
-    import {CreateTask} from '../index'
+    import StartScreen from './StartScreen'
 
     export default {
         async mounted () {
@@ -44,12 +49,12 @@
         methods: {
             async fetchTasksAndCategories () {
                 new Promise((resolve) => {
-                    console.log('fetch task and categories called')
                     this.tasks = this.$tasks.query()
                     this.categories = this.$categories.query()
                 })
             },
             gotoCreatePage () {
+                // this.$navigateTo(StartScreen)
                 this.$navigateTo(CreateTask)
             }
         },

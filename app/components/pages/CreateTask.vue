@@ -21,10 +21,7 @@
                         </wrap-layout>
 
                     </stack-layout>
-                    <label row="1" :text="'\uf0c7 Add Task'" androidElevation="3"
-                           @tap="saveNewTask"
-                           class="fas c-bg-blue c-white p-16 text-center font-weight-bold text-uppercase"
-                           fontSize="16"/>
+                    <custom-button row="1" :text="'\uf0c7 Add Task'" @tap="saveNewTask"/>
                 </grid-layout>
             </grid-layout>
         </grid-layout>

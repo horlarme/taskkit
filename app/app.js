@@ -10,5 +10,5 @@ Vue.prototype.$categories = new Couchbase('categories')
 Vue.config.silent = false
 
 new Vue({
-    template: `<frame><home /></frame>`
+    template: `<frame><start-screen /></frame>`
 }).$start()
