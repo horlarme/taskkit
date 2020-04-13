@@ -12,14 +12,13 @@
                                           verticalAlignment="center"
                                           horizontalAlignment="center"
                                           androidElevation="0" height="100%">
-                                <stack-layout class="p-28 m-15" androidElevation="4"
-                                              backgroundColor="white"
-                                              borderColor="#009B89" borderRadius="5"
-                                              borderWidth="1"></stack-layout>
+                                <stack-layout class="p-0 m-15">
+                                    <image src="res://illustration_01" stretch="aspectFit"/>
+                                </stack-layout>
                                 <stack-layout class="p-8 m-15 text-capitalize text-center">
                                     <label text="Create tasks and organise them efficiently the way you want"
                                            textWrap="true"
-                                           class="font-weight-bold" fontSize="20"/>
+                                           class="font-weight-bold" fontSize="22"/>
                                 </stack-layout>
                             </stack-layout>
                         </grid-layout>
@@ -30,14 +29,13 @@
                                           verticalAlignment="center"
                                           horizontalAlignment="center"
                                           androidElevation="0" height="100%">
-                                <stack-layout class="p-28 m-15" androidElevation="4"
-                                              backgroundColor="white"
-                                              borderColor="#009B89" borderRadius="5"
-                                              borderWidth="1"></stack-layout>
+                                <stack-layout class="p-0 m-15">
+                                    <image src="res://illustration_02" stretch="aspectFit"/>
+                                </stack-layout>
                                 <stack-layout class="p-8 m-15 text-capitalize text-center">
                                     <label text="Create tasks and organise them efficiently the way you want"
                                            textWrap="true"
-                                           class="font-weight-bold" fontSize="20"/>
+                                           class="font-weight-bold" fontSize="22"/>
                                 </stack-layout>
                             </stack-layout>
                         </grid-layout>
@@ -48,14 +46,13 @@
                                           verticalAlignment="center"
                                           horizontalAlignment="center"
                                           androidElevation="0" height="100%">
-                                <stack-layout class="p-28 m-15" androidElevation="4"
-                                              backgroundColor="white"
-                                              borderColor="#009B89" borderRadius="5"
-                                              borderWidth="1"></stack-layout>
+                                <stack-layout class="p-0 m-15">
+                                    <image src="res://illustration_03" stretch="aspectFit"/>
+                                </stack-layout>
                                 <stack-layout class="p-8 m-15 text-capitalize text-center">
                                     <label text="Create tasks and organise them efficiently the way you want"
                                            textWrap="true"
-                                           class="font-weight-bold" fontSize="20"/>
+                                           class="font-weight-bold" fontSize="22"/>
                                 </stack-layout>
                             </stack-layout>
                         </grid-layout>
@@ -70,7 +67,7 @@
                 </stack-layout>
             </grid-layout>
             <stack-layout row="1">
-                <custom-button title="Next" @tap="next"/>
+                <custom-button :title="selectedIndex === 2 ? 'Start' : 'Next'" @tap="next"/>
             </stack-layout>
         </grid-layout>
     </page>
@@ -78,21 +75,24 @@
 
 <script>
     import Home from './Home'
+    import * as settings from '@nativescript/core/application-settings'
 
     export default {
+        created () {
+            this.isNewApp = settings.getBoolean('isFirstTimeStarting', true)
+        },
+        mounted () {
+            if (!this.isNewApp) this.proceedToHomePage()
+        },
         data () {
             return {
+                isNewApp: true,
                 selectedIndex: 0
             }
         },
         methods: {
             next () {
-                if (this.selectedIndex === 2) {
-                    return this.$navigateTo(Home, {
-                        clearHistory: true
-                    })
-                }
-
+                if (this.selectedIndex === 2) return this.proceedToHomePage()
                 this.selectedIndex = this.selectedIndex + 1
             },
             tabViewLoaded (event) {
@@ -103,12 +103,13 @@
                 }
             },
             changeIndex (event) {
-                console.log(typeof event.newIndex)
                 this.selectedIndex = event.newIndex
+            },
+            proceedToHomePage () {
+                return this.$navigateTo(Home, {
+                    clearHistory: true
+                })
             }
-        },
-        updated () {
-            console.log('updated', this.selectedIndex)
         }
     }
 </script>

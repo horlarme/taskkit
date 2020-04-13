@@ -31,13 +31,13 @@
                     </TabViewItem>
                 </TabView>
             </GridLayout>
-            <fab row='0' class="fab-button" @tap="gotoCreatePage" icon="res://plus_white"/>
+            <fab row='0' class="fab-button" @tap="gotoCreatePage" icon="res://plus_icon"/>
         </GridLayout>
     </page>
 </template>
 
 <script>
-    import StartScreen from './StartScreen'
+    import CreateTask from './CreateTask'
 
     export default {
         async mounted () {
@@ -54,7 +54,6 @@
                 })
             },
             gotoCreatePage () {
-                // this.$navigateTo(StartScreen)
                 this.$navigateTo(CreateTask)
             }
         },
