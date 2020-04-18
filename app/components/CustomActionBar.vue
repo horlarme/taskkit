@@ -3,7 +3,7 @@
                  verticalAlignment='center'
                  androidElevation='3'
                  color="white"
-                 backgroundColor='blue'>
+                 :backgroundColor='backgroundColor'>
         <stack-layout col='0' borderRadius='100' padding="0 16 0 16"
                       verticalAlignment="center" v-if="back" @tap="backAction">
             <label text.decode="&#xf053; Back" fontSize="19" class="fas"/>
@@ -40,6 +40,11 @@
             actionItems: {
                 type: Array,
                 default: null
+            },
+            backgroundColor: {
+                type: String,
+                default: 'blue',
+                required: false
             }
         },
         methods: {

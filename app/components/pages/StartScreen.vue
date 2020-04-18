@@ -75,38 +75,63 @@
 
 <script>
     import Home from './Home'
-    import * as settings from '@nativescript/core/application-settings'
 
     export default {
-        created () {
-            this.isNewApp = settings.getBoolean('isFirstTimeStarting', true)
-        },
-        mounted () {
-            if (!this.isNewApp) this.proceedToHomePage()
-        },
         data () {
             return {
-                isNewApp: true,
                 selectedIndex: 0
             }
         },
+        mounted () {
+            if(!this.$store.state.isAppNew) return;
+            // we are doing this here because it will be the first screen
+            // to be displayed if the application is starting for the first time
+            const categories = [
+                {
+                    name: 'Tutorial', color: 'blue',
+                    tasks: [ 'Click here to see list of tasks', 'Tick the checkbox to toggle completed', 'Double tap on task name to delete' ]
+                }, {
+                    name: 'A Crimson Colored Category', color: 'crimson',
+                    tasks: [ 'The color of this task category is crimson', 'Do you like it?' ]
+                } ]
+            categories.forEach(category => {
+                let categoryId = this.$categories.createDocument({
+                    name: category.name,
+                    color: category.color
+                })
+                category.tasks.forEach(task => {
+                        this.$tasks.createDocument({
+                            title: task,
+                            categories: categoryId,
+                            created_at: Date.now()
+                        })
+                    }
+                )
+            })
+        },
         methods: {
             next () {
-                if (this.selectedIndex === 2) return this.proceedToHomePage()
+                if (this.selectedIndex === 2) {
+                    return this.proceedToHomePage()
+                }
                 this.selectedIndex = this.selectedIndex + 1
             },
             tabViewLoaded (event) {
-                if (event.object.android) {
-                    event.object.android.removeViewAt(1)
-                } else {
-                    event.object.ios.tabBar.hidden = true
+                try {
+                    if (event.object.android) {
+                        event.object.android.removeViewAt(1)
+                    } else {
+                        event.object.ios.tabBar.hidden = true
+                    }
+                } catch (e) {
+
                 }
             },
             changeIndex (event) {
                 this.selectedIndex = event.newIndex
             },
             proceedToHomePage () {
-                return this.$navigateTo(Home, {
+                this.$navigateTo(Home, {
                     clearHistory: true
                 })
             }

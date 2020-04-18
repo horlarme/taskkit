@@ -1,6 +1,6 @@
 {
   "nativescript": {
-    "id": "org.nativescript.taskkit",
+    "id": "com.lawaloladipupo.taskkit",
     "tns-ios": {
       "version": "6.4.0"
     },
@@ -13,11 +13,12 @@
   "repository": "<fill-your-repository-here>",
   "dependencies": {
     "@nativescript/theme": "~2.3.0",
+    "@nstudio/nativescript-checkbox": "^1.0.0",
     "nativescript-couchbase-plugin": "^0.9.6",
     "nativescript-floatingactionbutton": "^5.1.0",
     "nativescript-vue": "~2.4.0",
-    "vue": "^2.6.11",
     "tns-core-modules": "~6.4.0",
+    "vue": "^2.6.11",
     "vuex": "^3.1.3"
   },
   "devDependencies": {

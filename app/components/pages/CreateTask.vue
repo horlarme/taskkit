@@ -1,5 +1,5 @@
 <template>
-    <page :actionBarHidden="true">
+    <page :actionBarHidden="true" @navigatedTo="fetchCategories">
         <grid-layout>
             <grid-layout rows="auto, *" backgroundColor="white">
                 <custom-action-bar title="Create New Task" row="0" :back="true"/>
@@ -39,20 +39,15 @@
                 selectedCategory: null
             }
         },
-        mounted () {
-            this.fetchCategories()
-
-            this.$root.$on('database::change::categories', async (changes) => {
-                this.fetchCategories()
-            })
-        },
         methods: {
             saveNewTask () {
                 if (this.selectedCategory === null) return alert('Select a category')
                 if (!this.title || this.title === '') return alert('Enter a valid task title')
                 this.$tasks.createDocument({
                     categories: this.categories[this.selectedCategory].id,
-                    title: this.title
+                    title: this.title,
+                    created_at: Date.now(),
+                    completed: false
                 })
                 this.$root.$emit('database::change::tasks')
                 this.$navigateBack()
