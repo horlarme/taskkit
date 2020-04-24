@@ -1,9 +1,7 @@
 <template>
-    <grid-layout columns='auto, *, auto' paddingTop='24'
-                 verticalAlignment='center'
-                 androidElevation='3'
-                 color="white"
-                 :backgroundColor='backgroundColor'>
+    <grid-layout columns='auto, *, auto' verticalAlignment='center' id="custom_action_bar" :paddingTop="paddingTop"
+                 androidElevation='3' color="white" :backgroundColor='backgroundColor'
+                 @loaded="loaded">
         <stack-layout col='0' borderRadius='100' padding="0 16 0 16"
                       verticalAlignment="center" v-if="back" @tap="backAction">
             <label text.decode="&#xf053; Back" fontSize="19" class="fas"/>
@@ -27,6 +25,9 @@
 </template>
 
 <script>
+    import {isAndroid} from 'tns-core-modules/platform'
+    import {android} from 'tns-core-modules/application'
+
     export default {
         props: {
             title: {
@@ -54,6 +55,21 @@
                 } catch (e) {
 
                 }
+            },
+            loaded (eventData) {
+                if (isAndroid) {
+                    const statusResId = android.context.getResources().getIdentifier('status_bar_height', 'dimen', 'android')
+                    if (statusResId) {
+                        const statusBarHeight = android.context.getResources().getDimensionPixelSize(statusResId)
+                        this.paddingTop = statusBarHeight - 10
+                        // actionBar.setPadding(actionBar.getPaddingLeft(), statusBarHeight, actionBar.getPaddingRight(), actionBar.getPaddingBottom())
+                    }
+                }
+            }
+        },
+        data: function () {
+            return {
+                paddingTop: 24
             }
         }
     }

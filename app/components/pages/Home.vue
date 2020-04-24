@@ -46,7 +46,7 @@
     import CreateTask from './CreateTask'
 
     export default {
-        mounted(){
+        mounted () {
             this.$store.commit('setAppIsNew', false)
             this.fetchTasksAndCategories()
             this.$root.$on('database::change::tasks', this.fetchTasksAndCategories)
@@ -65,7 +65,7 @@
                             where: [
                                 {
                                     property: 'categories', comparison: 'equalTo', value: category.id
-                                }],
+                                } ],
                             limit: 5
                         })
                     })
