@@ -4,28 +4,15 @@ import {Couchbase} from 'nativescript-couchbase-plugin'
 import {android, AndroidApplication} from 'tns-core-modules/application'
 import StartScreen from '~/components/pages/StartScreen'
 import Home from '~/components/pages/Home'
-import Vuex from 'vuex'
 import Store from './store'
-
-Vue.use(Vuex)
-
-Vue.registerElement('CheckBox', () => require('@nstudio/nativescript-checkbox').CheckBox,
-    {
-        model: {
-            prop: 'checked',
-            event: 'checkedChange'
-        }
-    }
-)
-Vue.registerElement('Fab', () => require('nativescript-floatingactionbutton').Fab)
+import './directives'
 
 Vue.prototype.$tasks = new Couchbase('tasks')
 Vue.prototype.$categories = new Couchbase('categories')
 
 Vue.prototype.$store = Store
 
-Vue.config.silent = true
-// Vue.config.silent = TNS_ENV === 'production'
+Vue.config.silent = TNS_ENV === 'production'
 let startComponent = StartScreen
 
 const handleStart = (a) => {

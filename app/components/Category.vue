@@ -6,10 +6,10 @@
                       borderRadius='5' width='auto' androidElevation='7'>
             <label :text='category.name' fontSize='24' fontWeight='bold' color='white' padding='5 0 10 0'
                    borderBottomWidth='1' borderBottomColor='whitesmoke' marginBottom='15'/>
-            <label text='Empty Task' textWrap='true' padding='5 10' color='white' 
+            <label text='Empty Task' textWrap='true' padding='5 10' color='white'
                     v-if='!category.tasks.length'
                     textAlign='center' fontSize='20'/>
-            <label :text='(i+1) + ". " + task.title' v-else padding='5 10' color='white' fontSize='16'
+            <label :text='(i+1) + ". " + task.title' v-else padding='5 10' color='white' fontSize='14'
                    v-for="(task,i) in category.tasks" :key="i"/>
         </stack-layout>
     </stack-layout>

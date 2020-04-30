@@ -14,7 +14,7 @@
                             @tap="toggleTaskComplete">
                 <check-box class="p-0 m-0 m-r-4" :checked="task.completed" flexShrink="0"
                            @checkedChange="toggleTaskComplete"/>
-                <label fontSize='18' color='#5B5A66'
+                <label fontSize='15' color='#5B5A66'
                        textWrap="true"
                        :textDecoration="task.completed ? 'line-through' : 'none'"
                        :fontWeight="task.completed ? 'normal' : 'bold'"
@@ -22,7 +22,7 @@
             </flexbox-layout>
         </stack-layout>
         <stack-layout verticalAlignment='bottom' flexShrink="0">
-            <label text.decode='&#xf303;' fontSize='16' color='#B8B7BF'
+            <label text.decode='&#xf303;' fontSize='14' color='#B8B7BF'
                    class='fas p-16'/>
         </stack-layout>
     </flexbox-layout>

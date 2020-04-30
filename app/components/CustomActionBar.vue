@@ -1,16 +1,21 @@
 <template>
-    <grid-layout columns='auto, *, auto' verticalAlignment='center' id="custom_action_bar" :paddingTop="paddingTop"
-                 androidElevation='3' color="white" :backgroundColor='backgroundColor'
-                 @loaded="loaded">
-        <stack-layout col='0' borderRadius='100' padding="0 16 0 16"
+    <grid-layout columns='auto, *, auto' verticalAlignment='center'
+                 v-start-bar-height-set="height => this.paddingTop = (height-10)"
+                 :paddingTop="paddingTop"
+                 androidElevation='3' color="white" :backgroundColor='backgroundColor'>
+        <stack-layout col='0' v-if="menu" padding="0 16 0 18"
+                      verticalAlignment="center" @tap="openDrawer">
+            <label text.decode="&#xf0c9;" fontSize="24" class="fas"/>
+        </stack-layout>
+        <stack-layout col='0' padding="0 16 0 16"
                       verticalAlignment="center" v-if="back" @tap="backAction">
-            <label text.decode="&#xf053; Back" fontSize="19" class="fas"/>
+            <label text.decode="&#xf053; Back" fontSize="20" fontWeight="500" class="fas"/>
         </stack-layout>
         <stack-layout col='1' verticalAlignment='center' marginTop="16" marginBottom="16" marginLeft="16">
-            <label :text='title' fontSize='20' fontWeight='bold'
+            <label :text='title' fontSize='24' fontWeight='500'
                    horizontalAlignment='left'/>
         </stack-layout>
-        <stack-layout col='2' borderRadius='100' height='auto'
+        <stack-layout col='2' height='auto'
                       orientation="horizontal"
                       verticalAlignment="center" v-if="back">
             <label :text.decode="item.value"
@@ -25,8 +30,6 @@
 </template>
 
 <script>
-    import {isAndroid} from 'tns-core-modules/platform'
-    import {android} from 'tns-core-modules/application'
 
     export default {
         props: {
@@ -35,6 +38,10 @@
                 default: null
             },
             back: {
+                type: Boolean,
+                default: false
+            },
+            menu: {
                 type: Boolean,
                 default: false
             },
@@ -49,25 +56,17 @@
             }
         },
         methods: {
+            openDrawer () {
+                this.$root.$emit('drawer', 'open')
+            },
             backAction () {
                 try {
                     this.$navigateBack()
                 } catch (e) {
-
-                }
-            },
-            loaded (eventData) {
-                if (isAndroid) {
-                    const statusResId = android.context.getResources().getIdentifier('status_bar_height', 'dimen', 'android')
-                    if (statusResId) {
-                        const statusBarHeight = android.context.getResources().getDimensionPixelSize(statusResId)
-                        this.paddingTop = statusBarHeight - 10
-                        // actionBar.setPadding(actionBar.getPaddingLeft(), statusBarHeight, actionBar.getPaddingRight(), actionBar.getPaddingBottom())
-                    }
                 }
             }
         },
-        data: function () {
+        data () {
             return {
                 paddingTop: 24
             }
