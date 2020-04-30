@@ -1,6 +1,6 @@
 <template>
     <grid-layout columns='auto, *, auto' verticalAlignment='center'
-                 v-start-bar-height-set="height => this.paddingTop = (height-10)"
+                 v-start-bar-height-set="height => this.paddingTop = (height-20)"
                  :paddingTop="paddingTop"
                  androidElevation='3' color="white" :backgroundColor='backgroundColor'>
         <stack-layout col='0' v-if="menu" padding="0 16 0 18"
